@@ -1,0 +1,64 @@
+// ─── Wrapper HTTP ───────────────────────────────────────────────────────────
+
+const API_BASE_URL = process.env.API_URL;
+// URL de base de l'API
+if (!API_BASE_URL) {
+  throw new Error("La variable API_URL est manquante dans le fichier .env");
+}
+
+// Options acceptées par le wrapper apiRequest
+interface RequestOptions {
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  body?: unknown;
+  // Ajoute l'en-tête Authorization avec le token (true par défaut)
+  auth?: boolean;
+}
+
+// Wrapper centralisé : construit l'URL, pose les en-têtes (et le token si besoin),
+// envoie la requête et renvoie une promesse résolue avec le JSON de la réponse.
+function apiRequest<T = any>(
+  path: string,
+  { method = "GET", body, auth = true }: RequestOptions = {},
+): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (auth) {
+    // TODO: décommenter quand js-cookie sera installé
+    // headers.Authorization = `Bearer ${Cookie.get('token')}`
+  }
+
+  return fetch(`${API_BASE_URL}${path}`, {
+    method,
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+  }).then((response) => response.json() as Promise<T>);
+}
+
+// ─── Property ─────────────────────────────────────────────────────────────────────
+
+// Interface reutlisable
+export interface PropertyHost {
+  id: number;
+  name: string;
+  picture: string;
+}
+
+// fiche d'identité d'un logment
+export interface Property {
+  id: string;
+  slug?: string;
+  title: string;
+  description?: string;
+  cover?: string;
+  location?: string;
+  price_per_night: number;
+  rating_avg?: number;
+  ratings_count?: number;
+  host?: PropertyHost;
+}
+
+export function fetchProperties(): Promise<Property[]> {
+  return apiRequest<Property[]>("/api/properties", { auth: false });
+}
