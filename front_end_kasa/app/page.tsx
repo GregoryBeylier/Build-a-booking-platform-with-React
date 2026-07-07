@@ -1,9 +1,14 @@
+import PropertyCard from "@/components/property/PropertyCard";
 import { fetchProperties } from "@/lib/api";
 
 export default async function Home() {
-  const logement = await fetchProperties();
+  const logements = await fetchProperties();
 
-  console.log(logement);
-
-  return <div>Salut</div>;
+  return (
+    <>
+      {logements.map((logement) => (
+        <PropertyCard key={logement.id} property={logement} />
+      ))}
+    </>
+  );
 }
