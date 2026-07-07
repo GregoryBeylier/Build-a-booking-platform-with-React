@@ -6,7 +6,7 @@ export default function Logo() {
       <div className="relative w-24 h-8 hidden md:block">
         <Image src="/Logodesktop.svg" alt="Kasa" fill />
       </div>
-      <div className="relative w-24 h-8 block md:hidden">
+      <div className="relative w-[46px] h-[53px] block md:hidden">
         <Image src="/Logomobile.svg" alt="Kasa" fill />
       </div>
     </div>
