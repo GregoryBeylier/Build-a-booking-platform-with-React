@@ -57,8 +57,17 @@ export interface Property {
   rating_avg?: number;
   ratings_count?: number;
   host?: PropertyHost;
+  pictures?: string[];
+  equipments?: string[];
+  tags?: string[];
 }
 
+//appel toute les annonce pour les afficher sur l'acceuil
 export function fetchProperties(): Promise<Property[]> {
   return apiRequest<Property[]>("/api/properties", { auth: false });
+}
+
+//appel une annonce par son ID
+export function fetchPropertyById(id: string): Promise<Property> {
+  return apiRequest<Property>(`/api/properties/${id}`, { auth: false });
 }
