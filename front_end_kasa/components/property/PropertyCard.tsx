@@ -5,9 +5,15 @@ import FavoriteButton from "./FavoriteButton";
 
 export interface PropertyCardProps {
   property: Property;
+  initialFavorite?: boolean;
+  onRemoveFavorite?: () => void;
 }
 
-export default function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({
+  property,
+  initialFavorite,
+  onRemoveFavorite,
+}: PropertyCardProps) {
   return (
     <div>
       <Link href={`/properties/${property.id}`}>
@@ -19,7 +25,11 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             className="object-cover"
           />
           <div className=" flex items-center absolute bg-[#F5F5F5] top-4 right-4 w-8 h-8 rounded-[5px] justify-center ">
-            <FavoriteButton propertyId={property.id} />
+            <FavoriteButton
+              propertyId={property.id}
+              initialFavorite={initialFavorite}
+              onRemove={onRemoveFavorite}
+            />
           </div>
         </div>
         <div className="flex flex-col justify-between w-full h-[176px] rounded-b-[10px] bg-white pt-4 px-6 pb-6">

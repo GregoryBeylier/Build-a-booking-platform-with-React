@@ -1,4 +1,4 @@
-import PropertyCard from "@/components/property/PropertyCard";
+import PropertyGrid from "@/components/property/PropertyGrid";
 import StepCard from "@/components/step/StepCard";
 import type { StepProps } from "@/components/step/StepCard";
 import { fetchProperties } from "@/lib/api";
@@ -44,11 +44,7 @@ export default async function Home() {
           className="object-cover"
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
-        {logements.map((logement) => (
-          <PropertyCard key={logement.id} property={logement} />
-        ))}
-      </div>
+      <PropertyGrid properties={logements} />
 
       <div className="mb-10 bg-white w-full rounded-[10px] p-10 flex flex-col gap-10">
         <div>

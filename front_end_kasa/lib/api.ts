@@ -130,3 +130,8 @@ export function fetchRemoveFavorite(id: string): Promise<FavoriteResponse> {
     method: "DELETE",
   });
 }
+
+// pour affichier la liste des logments en forvori
+export function fetchFavorites(id: string): Promise<Property[]> {
+  return apiRequest<Property[]>(`/api/users/${id}/favorites`, {});
+}
