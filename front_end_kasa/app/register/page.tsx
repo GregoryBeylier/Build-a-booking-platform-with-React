@@ -54,6 +54,7 @@ export default function Register() {
       password: data.password,
     });
     Cookies.set("token", result.token);
+    Cookies.set("userId", result.user.id.toString());
     router.push("/");
     router.refresh();
   };

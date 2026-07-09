@@ -36,6 +36,7 @@ export default function SignIn() {
   const onSubmit = async (data: Input) => {
     const result = await fetchLogin(data);
     Cookies.set("token", result.token);
+    Cookies.set("userId", result.user.id.toString());
     router.push("/");
     router.refresh();
   };
