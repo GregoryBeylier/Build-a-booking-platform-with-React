@@ -1,6 +1,8 @@
+import Cookie from "js-cookie";
+
 // ─── Wrapper HTTP ───────────────────────────────────────────────────────────
 
-const API_BASE_URL = process.env.API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 // URL de base de l'API
 if (!API_BASE_URL) {
   throw new Error("La variable API_URL est manquante dans le fichier .env");
@@ -25,8 +27,7 @@ function apiRequest<T = any>(
   };
 
   if (auth) {
-    // TODO: décommenter quand js-cookie sera installé
-    // headers.Authorization = `Bearer ${Cookie.get('token')}`
+    headers.Authorization = `Bearer ${Cookie.get("token")}`;
   }
 
   return fetch(`${API_BASE_URL}${path}`, {
@@ -70,4 +71,28 @@ export function fetchProperties(): Promise<Property[]> {
 //appel une annonce par son ID
 export function fetchPropertyById(id: string): Promise<Property> {
   return apiRequest<Property>(`/api/properties/${id}`, { auth: false });
+}
+
+// ─── Login / register ─────────────────────────────────────────────────────────────────────
+
+export interface UserSession {
+  token: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    picture?: string;
+    role: "owner" | "client" | "admin";
+  };
+}
+
+export function fetchLogin(credentials: {
+  password: string;
+  email: string;
+}): Promise<UserSession> {
+  return apiRequest<UserSession>("/auth/login", {
+    method: "POST",
+    body: credentials,
+    auth: false,
+  });
 }
