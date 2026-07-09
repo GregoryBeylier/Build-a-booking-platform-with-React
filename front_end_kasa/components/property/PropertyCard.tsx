@@ -1,7 +1,7 @@
 import type { Property } from "@/lib/api";
-import { Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import FavoriteButton from "./FavoriteButton";
 
 export interface PropertyCardProps {
   property: Property;
@@ -19,9 +19,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             className="object-cover"
           />
           <div className=" flex items-center absolute bg-[#F5F5F5] top-4 right-4 w-8 h-8 rounded-[5px] justify-center ">
-            <button aria-label="Ajouter aux favoris">
-              <Heart size={14} fill="#565656" />
-            </button>
+            <FavoriteButton propertyId={property.id} />
           </div>
         </div>
         <div className="flex flex-col justify-between w-full h-[176px] rounded-b-[10px] bg-white pt-4 px-6 pb-6">

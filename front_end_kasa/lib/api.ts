@@ -110,3 +110,23 @@ export function fetchRegister(register: {
     auth: false,
   });
 }
+
+// ─── Favoris ─────────────────────────────────────────────────────────────────────
+
+export interface FavoriteResponse {
+  ok: boolean;
+}
+
+// pour ajouter un logement aux favoris
+export function fetchAddFavorite(id: string): Promise<FavoriteResponse> {
+  return apiRequest<FavoriteResponse>(`/api/properties/${id}/favorite`, {
+    method: "POST",
+  });
+}
+
+// pour retirer un logement aux favoris
+export function fetchRemoveFavorite(id: string): Promise<FavoriteResponse> {
+  return apiRequest<FavoriteResponse>(`/api/properties/${id}/favorite`, {
+    method: "DELETE",
+  });
+}
