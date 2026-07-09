@@ -7,7 +7,7 @@ export default function LogoutButton() {
   const router = useRouter();
   const handleLogout = () => {
     Cookie.remove("token");
-    router.push("/SignIn");
+    router.push("/signIn");
     router.refresh();
   };
 

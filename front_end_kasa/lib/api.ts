@@ -86,6 +86,7 @@ export interface UserSession {
   };
 }
 
+// pour se connecter
 export function fetchLogin(credentials: {
   password: string;
   email: string;
@@ -93,6 +94,19 @@ export function fetchLogin(credentials: {
   return apiRequest<UserSession>("/auth/login", {
     method: "POST",
     body: credentials,
+    auth: false,
+  });
+}
+
+// pour créer un compte
+export function fetchRegister(register: {
+  password: string;
+  email: string;
+  name: string;
+}): Promise<UserSession> {
+  return apiRequest<UserSession>("/auth/register", {
+    method: "POST",
+    body: register,
     auth: false,
   });
 }
