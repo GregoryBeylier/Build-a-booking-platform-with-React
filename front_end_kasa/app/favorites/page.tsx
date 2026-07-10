@@ -30,16 +30,16 @@ export default function Favorites() {
 
   return (
     <div className="flex flex-col gap-10 max-w-7xl mx-auto mt-[51px]">
-      <div className="text-center">
+      <div className="text-center mb-[70px]">
         <h1 className="font-bold text-[32px] leading-[143%] text-[#99331A]">
           Vos favoris
         </h1>
-        <p className="font-normal text-sm leading-[143%] text-black max-w-[450] mx-auto">
+        <p className="font-normal text-sm leading-[143%] text-black max-w-[500px] mx-auto">
           Retrouvez ici tous les logements que vous avez aimés. Prêts à réserver
           ? Un simple clic et votre prochain séjour est en route.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-[70px]">
         {favorites.map((favorite) => (
           <PropertyCard
             key={favorite.id}

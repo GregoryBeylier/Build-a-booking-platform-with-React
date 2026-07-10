@@ -34,7 +34,13 @@ function apiRequest<T = any>(
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
-  }).then((response) => response.json() as Promise<T>);
+  }).then(async (response) => {
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error);
+    }
+    return response.json() as Promise<T>;
+  });
 }
 
 // ─── Property ─────────────────────────────────────────────────────────────────────

@@ -35,11 +35,19 @@ export default function FavoriteButton({
   };
 
   return (
-    <button onClick={handleToggleFavorite} aria-label="Ajouter aux favoris">
+    <button
+      onClick={handleToggleFavorite}
+      aria-label="Ajouter aux favoris"
+      className={
+        isFavorite
+          ? "flex items-center justify-center w-8 h-8 rounded-[5px] bg-[#99331A]"
+          : "flex items-center justify-center w-8 h-8 rounded-[5px] bg-[#F5F5F5]"
+      }
+    >
       <Heart
         size={17}
-        className={isFavorite ? "text-[#99331A]" : "text-[#565656]"}
-        fill={isFavorite ? "#99331A" : "none"}
+        className={isFavorite ? "text-[#FFFFFF]" : "text-[#FFFFFF]"}
+        fill={isFavorite ? "#E0C1BA" : "#868686"}
       />
     </button>
   );

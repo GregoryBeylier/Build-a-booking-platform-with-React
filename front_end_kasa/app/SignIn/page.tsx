@@ -6,6 +6,7 @@ import Cookie from "js-cookie";
 import { fetchLogin } from "@/lib/api";
 import * as z from "zod";
 import FormField from "@/components/ui/FormField";
+import { useState } from "react";
 
 const schema = z.object({
   email: z.string().min(1, "Email requis").email("Adresse email invalide"),
@@ -32,13 +33,23 @@ export default function SignIn() {
   // Cookie permet de stocker le token dans le navigateur
   const Cookies = Cookie.withAttributes({ path: "/" });
 
+  const [loginError, setLoginError] = useState("");
+
   // onSubmit envoie les données du formulaire à l'API
   const onSubmit = async (data: Input) => {
-    const result = await fetchLogin(data);
-    Cookies.set("token", result.token);
-    Cookies.set("userId", result.user.id.toString());
-    router.push("/");
-    router.refresh();
+    try {
+      const result = await fetchLogin(data);
+      Cookies.set("token", result.token);
+      Cookies.set("userId", result.user.id.toString());
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      if (err instanceof Error && err.message === "invalid credentials") {
+        setLoginError("Email ou mot de passe incorrect");
+      } else {
+        setLoginError("Une erreur est survenue");
+      }
+    }
   };
 
   return (
@@ -93,6 +104,9 @@ export default function SignIn() {
               Créer un compte
             </a>
           </span>
+          <p role="alert" className="text-red-600 ">
+            {loginError}
+          </p>
         </div>
       </form>
     </div>

@@ -6,6 +6,7 @@ import Cookie from "js-cookie";
 import * as z from "zod";
 import { fetchRegister } from "@/lib/api";
 import FormField from "@/components/ui/FormField";
+import { useState } from "react";
 
 // Schéma de validation Zod du formulaire d'inscription
 const schema = z.object({
@@ -45,18 +46,28 @@ export default function Register() {
   // Cookie permet de stocker le token dans le navigateur
   const Cookies = Cookie.withAttributes({ path: "/" });
 
+  const [registerError, setRegisterError] = useState("");
+
   // onSubmit envoie les données du formulaire à l'API
   const onSubmit = async (data: Input) => {
-    const name = `${data.firstName} ${data.lastName}`;
-    const result = await fetchRegister({
-      name,
-      email: data.email,
-      password: data.password,
-    });
-    Cookies.set("token", result.token);
-    Cookies.set("userId", result.user.id.toString());
-    router.push("/");
-    router.refresh();
+    try {
+      const name = `${data.firstName} ${data.lastName}`;
+      const result = await fetchRegister({
+        name,
+        email: data.email,
+        password: data.password,
+      });
+      Cookies.set("token", result.token);
+      Cookies.set("userId", result.user.id.toString());
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      if (err instanceof Error && err.message === "email already registered") {
+        setRegisterError("Cette adresse email est déjà utilisée");
+      } else {
+        setRegisterError("Une erreur est survenue");
+      }
+    }
   };
 
   return (
@@ -142,6 +153,9 @@ export default function Register() {
               Se connecter
             </a>
           </span>
+          <p role="alert" className="text-red-600 ">
+            {registerError}
+          </p>
         </div>
       </form>
     </div>
