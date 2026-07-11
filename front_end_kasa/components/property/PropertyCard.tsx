@@ -41,7 +41,7 @@ export default function PropertyCard({
               {property.location}
             </p>
           </div>
-          <p className="/* TODO: classes du prix, à récupérer depuis Figma */">
+          <p>
             {property.price_per_night} €
             <span className="text-sm font-normal leading-[143%] text-[#565656]">
               {" "}

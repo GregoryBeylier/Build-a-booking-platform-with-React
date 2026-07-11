@@ -79,6 +79,29 @@ export function fetchPropertyById(id: string): Promise<Property> {
   return apiRequest<Property>(`/api/properties/${id}`, { auth: false });
 }
 
+// ─── Create Property ─────────────────────────────────────────────────────────────────────
+
+export type CreatePropertyPayload = Pick<
+  Property,
+  | "title"
+  | "description"
+  | "location"
+  | "price_per_night"
+  | "cover"
+  | "equipments"
+  | "tags"
+>;
+
+//appel une annonce par son ID
+export function fetchAddProperty(
+  newProperty: CreatePropertyPayload,
+): Promise<Property> {
+  return apiRequest<Property>("/api/properties", {
+    method: "POST",
+    body: newProperty,
+  });
+}
+
 // ─── Login / register ─────────────────────────────────────────────────────────────────────
 
 export interface UserSession {
