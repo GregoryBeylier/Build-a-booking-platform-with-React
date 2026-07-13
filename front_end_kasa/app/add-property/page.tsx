@@ -1,9 +1,16 @@
 "use client";
 import FormField from "@/components/ui/FormField";
-import { CreatePropertyPayload, fetchAddProperty } from "@/lib/api";
+import {
+  CreatePropertyPayload,
+  fetchAddProperty,
+  fetchUploadImage,
+  fetchUser,
+  UserProfile,
+} from "@/lib/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -14,6 +21,8 @@ const schema = z.object({
   location: z.string().min(1, "la localisation est requise"),
   postalCode: z.string().optional(),
   equipments: z.array(z.string()).optional(),
+  cover: z.string().optional(),
+  pictures: z.array(z.string()).optional(),
 });
 
 type Input = z.infer<typeof schema>;
@@ -71,6 +80,7 @@ export default function AddProperty() {
   // useForm gère la validation, les valeurs des champs et les erreurs du formulaire
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -93,6 +103,40 @@ export default function AddProperty() {
     router.push(`/properties/${result.id}`);
     router.refresh();
   };
+
+  async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = await fetchUploadImage({ file, purpose: "property-cover" });
+    setValue("cover", url);
+  }
+
+  async function handlePicturesUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+    const files = [...e.target.files];
+    const urls: string[] = [];
+
+    for (const file of files) {
+      const url = await fetchUploadImage({ file, purpose: "pictures" });
+      urls.push(url);
+    }
+
+    setValue("pictures", urls);
+  }
+
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const id = Cookie.get("userId");
+      if (!id) {
+        return;
+      }
+      const result = await fetchUser(id);
+      setUser(result);
+    };
+    loadUser();
+  }, []);
 
   return (
     <div className="flex flex-col max-w-[742px] w-full mx-auto rounded-[10px] border border-[#F5F5F5] py-8 px-4 md:p-[80px] gap-[38px] bg-white mt-[135px] mb-[135px]">
@@ -143,11 +187,10 @@ export default function AddProperty() {
         <div>
           <h2>Équipements</h2>
           <div>
-            {equipmentsList.map((equipment, index) => (
-              <label>
+            {equipmentsList.map((equipment) => (
+              <label key={equipment}>
                 <input
                   type="checkbox"
-                  key={index}
                   value={equipment}
                   {...register("equipments")}
                 />
@@ -174,6 +217,52 @@ export default function AddProperty() {
                 {tag}
               </button>
             ))}
+
+            <div className="flex flex-col gap-1">
+              <label
+                className="text-sm font-medium text-[#0D0D0D]"
+                htmlFor="customCategory"
+              >
+                Ajouter une catégorie personnalisée
+              </label>
+              <input
+                className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+                id="customCategory"
+                type="text"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              className="text-sm font-medium text-[#0D0D0D]"
+              htmlFor="uploadCover"
+            >
+              Image de couverture
+            </label>
+            <input
+              className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+              id="uploadCover"
+              type="file"
+              onChange={handleCoverUpload}
+            />
+
+            <label
+              className="text-sm font-medium text-[#0D0D0D]"
+              htmlFor="uploadPicture"
+            >
+              Image du logement
+            </label>
+            <input
+              multiple
+              className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+              id="uploadPicture"
+              type="file"
+              onChange={handlePicturesUpload}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label>Nom de l'hôte</label>
+            <input value={user?.name ?? ""} readOnly />
           </div>
         </div>
 
