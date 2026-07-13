@@ -10,7 +10,7 @@ if (!API_BASE_URL) {
 
 // Options acceptées par le wrapper apiRequest
 interface RequestOptions {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   // Ajoute l'en-tête Authorization avec le token (true par défaut)
   auth?: boolean;
@@ -22,18 +22,27 @@ function apiRequest<T = any>(
   path: string,
   { method = "GET", body, auth = true }: RequestOptions = {},
 ): Promise<T> {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
+  const headers: Record<string, string> = {};
+
+  if (!(body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
 
   if (auth) {
     headers.Authorization = `Bearer ${Cookie.get("token")}`;
   }
 
+  let requestBody: BodyInit | undefined;
+
+  if (body instanceof FormData) {
+    requestBody = body;
+  } else {
+    requestBody = body === undefined ? undefined : JSON.stringify(body);
+  }
   return fetch(`${API_BASE_URL}${path}`, {
     method,
     headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
+    body: requestBody,
   }).then(async (response) => {
     if (!response.ok) {
       const data = await response.json();
@@ -163,4 +172,44 @@ export function fetchRemoveFavorite(id: string): Promise<FavoriteResponse> {
 // pour affichier la liste des logments en forvori
 export function fetchFavorites(id: string): Promise<Property[]> {
   return apiRequest<Property[]>(`/api/users/${id}/favorites`, {});
+}
+
+// ─── upload ─────────────────────────────────────────────────────────────────────
+
+export interface Upload {
+  file: File;
+  purpose?: string;
+}
+
+export function fetchUploadImage({ file, purpose }: Upload): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+  if (purpose) {
+    formData.append("purpose", purpose);
+  }
+  return apiRequest<{ url: string }>("/api/uploads/image", {
+    method: "POST",
+    body: formData,
+  }).then((data) => data.url);
+}
+
+// ─── Users ─────────────────────────────────────────────────────────────────────
+
+export type UserProfile = Pick<
+  UserSession["user"],
+  "id" | "name" | "picture" | "role"
+>;
+
+export function fetchUser(id: string): Promise<UserProfile> {
+  return apiRequest<UserProfile>(`/api/users/${id}`, {});
+}
+
+export function fetchUpdateUser(
+  id: string,
+  data: UserProfile,
+): Promise<UserProfile> {
+  return apiRequest<UserProfile>(`/api/users/${id}`, {
+    body: data,
+    method: "PATCH",
+  });
 }
