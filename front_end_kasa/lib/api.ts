@@ -99,6 +99,7 @@ export type CreatePropertyPayload = Pick<
   | "cover"
   | "equipments"
   | "tags"
+  | "pictures"
 >;
 
 //appel une annonce par son ID
@@ -204,9 +205,11 @@ export function fetchUser(id: string): Promise<UserProfile> {
   return apiRequest<UserProfile>(`/api/users/${id}`, {});
 }
 
+export type UpdateUserPayload = Pick<UserProfile, "name" | "picture" | "role">;
+
 export function fetchUpdateUser(
   id: string,
-  data: UserProfile,
+  data: UpdateUserPayload,
 ): Promise<UserProfile> {
   return apiRequest<UserProfile>(`/api/users/${id}`, {
     body: data,
