@@ -1,5 +1,5 @@
 import type { Property } from "@/lib/api";
-import Image from "next/image";
+import UploadedImage from "@/components/ui/UploadedImage";
 import Link from "next/link";
 import FavoriteButton from "./FavoriteButton";
 
@@ -18,7 +18,7 @@ export default function PropertyCard({
     <div>
       <Link href={`/properties/${property.id}`}>
         <div className="relative aspect-[355/376] rounded-t-[10px] w-full overflow-hidden">
-          <Image
+          <UploadedImage
             src={property.cover ?? "/cover-annonce-immobilier-defaut.svg"}
             alt={property.title}
             fill
