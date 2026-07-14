@@ -100,7 +100,7 @@ export type CreatePropertyPayload = Pick<
   | "equipments"
   | "tags"
   | "pictures"
->;
+> & { host_id: number };
 
 //appel une annonce par son ID
 export function fetchAddProperty(
@@ -191,7 +191,11 @@ export function fetchUploadImage({ file, purpose }: Upload): Promise<string> {
   return apiRequest<{ url: string }>("/api/uploads/image", {
     method: "POST",
     body: formData,
-  }).then((data) => data.url);
+  }).then((data) =>
+    data.url.startsWith("http")
+      ? data.url
+      : `${process.env.NEXT_PUBLIC_API_URL}${data.url}`,
+  );
 }
 
 // ─── Users ─────────────────────────────────────────────────────────────────────
