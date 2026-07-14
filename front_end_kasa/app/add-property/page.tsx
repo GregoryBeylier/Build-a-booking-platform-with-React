@@ -1,8 +1,10 @@
 "use client";
+import BackButton from "@/components/ui/BackButton";
 import FormField from "@/components/ui/FormField";
 import {
   CreatePropertyPayload,
   fetchAddProperty,
+  fetchUpdateUser,
   fetchUploadImage,
   fetchUser,
   UserProfile,
@@ -92,18 +94,6 @@ export default function AddProperty() {
   // useRouter permet de naviguer entre les pages
   const router = useRouter();
 
-  const onSubmit = async (data: Input) => {
-    const newProperty: CreatePropertyPayload = {
-      title: data.title,
-      description: data.description,
-      price_per_night: data.price_per_night,
-      location: `${data.location} ${data.postalCode}`,
-    };
-    const result = await fetchAddProperty(newProperty);
-    router.push(`/properties/${result.id}`);
-    router.refresh();
-  };
-
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -138,85 +128,226 @@ export default function AddProperty() {
     loadUser();
   }, []);
 
+  async function handleUserPicture(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!user) return;
+
+    const url = await fetchUploadImage({ file, purpose: "user-picture" });
+    const updatedUser = await fetchUpdateUser(user.id.toString(), {
+      name: user.name,
+      picture: url,
+      role: user.role,
+    });
+    setUser(updatedUser);
+  }
+
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const onSubmit = async (data: Input) => {
+    const newProperty: CreatePropertyPayload = {
+      title: data.title,
+      description: data.description,
+      price_per_night: data.price_per_night,
+      location: `${data.location} ${data.postalCode}`,
+      cover: data.cover,
+      pictures: data.pictures,
+      equipments: data.equipments,
+      tags: selectedTags,
+    };
+
+    try {
+      const result = await fetchAddProperty(newProperty);
+      router.push(`/properties/${result.id}`);
+      router.refresh();
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Une erreur est survenue",
+      );
+    }
+  };
+
   return (
-    <div className="flex flex-col max-w-[742px] w-full mx-auto rounded-[10px] border border-[#F5F5F5] py-8 px-4 md:p-[80px] gap-[38px] bg-white mt-[135px] mb-[135px]">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-[38px]"
-      >
-        <div className="flex flex-col gap-[38px] max-w-[360px] w-full mx-auto">
-          <FormField
-            label="titre de la propriété"
-            id="title"
-            type="text"
-            registration={register("title")}
-            error={errors.title?.message}
-          />
-
-          <FormField
-            label="description"
-            id="description"
-            type="text"
-            registration={register("description")}
-          />
-
-          <FormField
-            label="Code postal"
-            id="postalCode"
-            type="text"
-            registration={register("postalCode")}
-          />
-
-          <FormField
-            label="localisation"
-            id="location"
-            type="text"
-            registration={register("location")}
-            error={errors.location?.message}
-          />
-
-          <FormField
-            label="Prix par nuits"
-            id="price_per_night"
-            type="text"
-            registration={register("price_per_night")}
-            error={errors.price_per_night?.message}
-          />
-        </div>
-
-        <div>
-          <h2>Équipements</h2>
-          <div>
-            {equipmentsList.map((equipment) => (
-              <label key={equipment}>
-                <input
-                  type="checkbox"
-                  value={equipment}
-                  {...register("equipments")}
-                />
-                {equipment}
-              </label>
-            ))}
+    <div className="max-w-[1200px] w-full mx-auto mt-[135px] mb-[135px] px-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-8">
+          <BackButton label="Retour" href="/" />
+          <div className="flex items-center justify-between mt-6">
+            <h1 className="text-2xl font-bold">Ajouter une propriété</h1>
+            <button
+              type="submit"
+              className="py-2 px-6 rounded-[10px] bg-[#99331A] text-white text-sm"
+            >
+              Ajouter
+            </button>
           </div>
         </div>
 
-        <div>
-          Catégories
-          <div className="flex flex-wrap gap-2">
-            {tagList.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => toggleTag(tag)}
-                className={`py-2 px-4 rounded-[5px] text-xs font-normal ${
-                  selectedTags.includes(tag)
-                    ? "bg-[#99331A] text-white"
-                    : "bg-[#F5F5F5] text-[#565656]"
-                }`}
+        {submitError && (
+          <p role="alert" className="text-red-600 text-center mb-4">
+            {submitError}
+          </p>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Carte Infos */}
+          <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-[80px] flex flex-col gap-4 w-full md:w-[576px]">
+            <FormField
+              label="Titre de la propriété"
+              id="title"
+              type="text"
+              placeholder="Ex : Appartement cosy au coeur de paris"
+              registration={register("title")}
+              error={errors.title?.message}
+            />
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="description"
+                className="text-sm font-medium text-[#0D0D0D]"
               >
-                {tag}
-              </button>
-            ))}
+                Description
+              </label>
+              <textarea
+                id="description"
+                placeholder="Décrivez votre propriété en détail..."
+                className="w-full h-[120px] rounded-[4px] border border-[#F5F5F5] bg-white p-2.5 placeholder:text-sm"
+                {...register("description")}
+              />
+            </div>
+            <FormField
+              label="Code postal"
+              id="postalCode"
+              type="text"
+              placeholder="Ex : 28100"
+              registration={register("postalCode")}
+            />
+            <FormField
+              label="Localisation"
+              id="location"
+              type="text"
+              registration={register("location")}
+              placeholder="Ex : Dreux"
+              error={errors.location?.message}
+            />
+            <FormField
+              label="Prix par nuits"
+              id="price_per_night"
+              type="text"
+              registration={register("price_per_night")}
+              placeholder="Ex : 110 €"
+              error={errors.price_per_night?.message}
+            />
+          </div>
+
+          {/* Colonne droite haute : Images + Hôte, empilées */}
+          <div className="flex flex-col gap-6">
+            <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label
+                  className="text-sm font-medium text-[#0D0D0D]"
+                  htmlFor="uploadCover"
+                >
+                  Image de couverture
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+                    id="uploadCover"
+                    type="file"
+                    onChange={handleCoverUpload}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label
+                  className="text-sm font-medium text-[#0D0D0D]"
+                  htmlFor="uploadPicture"
+                >
+                  Image du logement
+                </label>
+                <input
+                  multiple
+                  className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+                  id="uploadPicture"
+                  type="file"
+                  onChange={handlePicturesUpload}
+                />
+              </div>
+            </div>
+
+            <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label
+                  className="text-sm font-medium text-[#0D0D0D]"
+                  htmlFor="host"
+                >
+                  Nom de l'hôte
+                </label>
+                <input
+                  id="host"
+                  className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+                  value={user?.name ?? ""}
+                  readOnly
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label
+                  className="text-sm font-medium text-[#0D0D0D]"
+                  htmlFor="userPicture"
+                >
+                  Photo de profil
+                </label>
+                <input
+                  id="userPicture"
+                  className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
+                  onChange={handleUserPicture}
+                  type="file"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Carte Équipements */}
+          <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-6">
+            <h2 className="font-medium mb-4">Équipements</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {equipmentsList.map((equipment) => (
+                <label
+                  key={equipment}
+                  className="flex items-center gap-2 text-sm"
+                >
+                  <input
+                    type="checkbox"
+                    value={equipment}
+                    {...register("equipments")}
+                  />
+                  {equipment}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Carte Catégories */}
+          <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-6">
+            <h2 className="font-medium mb-4">Catégories</h2>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {tagList.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleTag(tag)}
+                  className={`py-2 px-4 rounded-[5px] text-xs font-normal ${
+                    selectedTags.includes(tag)
+                      ? "bg-[#99331A] text-white"
+                      : "bg-[#F5F5F5] text-[#565656]"
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
 
             <div className="flex flex-col gap-1">
               <label
@@ -232,46 +363,7 @@ export default function AddProperty() {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <label
-              className="text-sm font-medium text-[#0D0D0D]"
-              htmlFor="uploadCover"
-            >
-              Image de couverture
-            </label>
-            <input
-              className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
-              id="uploadCover"
-              type="file"
-              onChange={handleCoverUpload}
-            />
-
-            <label
-              className="text-sm font-medium text-[#0D0D0D]"
-              htmlFor="uploadPicture"
-            >
-              Image du logement
-            </label>
-            <input
-              multiple
-              className="w-full h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5"
-              id="uploadPicture"
-              type="file"
-              onChange={handlePicturesUpload}
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label>Nom de l'hôte</label>
-            <input value={user?.name ?? ""} readOnly />
-          </div>
         </div>
-
-        <button
-          className="w-[230px] h-[48px] rounded-[10px] py-3 px-8 bg-[#99331A] text-white mx-auto"
-          type="submit"
-        >
-          Ajouter
-        </button>
       </form>
     </div>
   );
