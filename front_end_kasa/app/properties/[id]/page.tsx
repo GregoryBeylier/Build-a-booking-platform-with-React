@@ -1,8 +1,8 @@
 import TagList from "@/components/property/TagList";
 import BackButton from "@/components/ui/BackButton";
+import UploadedImage from "@/components/ui/UploadedImage";
 import { fetchPropertyById } from "@/lib/api";
 import { Star, MapPin } from "lucide-react";
-import Image from "next/image";
 
 export default async function PropertyDetail({
   params,
@@ -24,7 +24,7 @@ export default async function PropertyDetail({
         <div className="flex-1 flex flex-col gap-[20px] md:mb-[86px]">
           <div className="flex-col flex flex-1 gap-[10px] md:flex-row">
             <div className="relative aspect-[303/357] rounded-[10px] flex-1 overflow-hidden">
-              <Image
+              <UploadedImage
                 src={
                   details.pictures?.[0] ??
                   "/cover-annonce-immobilier-defaut.svg"
@@ -40,7 +40,7 @@ export default async function PropertyDetail({
                   key={index}
                   className="relative aspect-[146.5/174] rounded-[10px] w-full overflow-hidden"
                 >
-                  <Image
+                  <UploadedImage
                     src={picture}
                     alt="Photo du logement"
                     fill
@@ -76,7 +76,7 @@ export default async function PropertyDetail({
           </div>
           <div className="flex items-center gap-[18px]">
             <div className="relative w-[82px] h-[82px] rounded-[10px] overflow-hidden">
-              <Image
+              <UploadedImage
                 src={details.host?.picture ?? "/avatar-defaut.svg"}
                 alt="Photo de profil de l'hôte"
                 fill
