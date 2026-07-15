@@ -220,3 +220,21 @@ export function fetchUpdateUser(
     method: "PATCH",
   });
 }
+
+// ─── Message ─────────────────────────────────────────────────────────────────────
+
+export interface Message {
+  id: number;
+  senderId: number;
+  content: string;
+  createdAt: string;
+}
+
+export interface Conversation {
+  id: number;
+  hostId: number;
+  name: string;
+  picture: string;
+  unread: boolean;
+  messages: Message[];
+}
