@@ -12,9 +12,6 @@ export interface MessengerClientProps {
 export default function MessengerClient({
   conversations: initialConversations,
 }: MessengerClientProps) {
-  // Copie locale des conversations reçues : on ne peut pas modifier
-  // directement une prop, donc si on veut pouvoir "envoyer un message"
-  // (ajouter à la liste), il faut son propre state.
   const [conversations, setConversations] = useState(initialConversations);
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
@@ -50,9 +47,13 @@ export default function MessengerClient({
   }
 
   return (
-    <div className="flex h-screen w-full bg-white">
+    <div className="flex h-screen w-[calc(100%+2rem)] -mx-4 bg-white">
       {/* Colonne gauche : liste des conversations */}
-      <div className="w-full md:w-1/4 md:min-w-[320px] md:max-w-[420px] border-r border-[#F5F5F5] flex flex-col">
+      <div
+        className={`${
+          selectedConversationId ? "hidden md:flex" : "flex"
+        } w-full md:w-1/4 md:min-w-[320px] md:max-w-[420px] border-r border-[#F5F5F5] flex-col`}
+      >
         <div className="p-6">
           <BackButton label="Retour" href="/" />
           <h1 className="text-3xl font-bold mb-4 mt-[23px]">Messages</h1>
@@ -72,7 +73,7 @@ export default function MessengerClient({
                   isSelected ? "bg-[#FBEDE9]" : "bg-white"
                 }`}
               >
-                <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
                   <Image
                     src={conversation.picture}
                     alt={conversation.name}
@@ -113,9 +114,20 @@ export default function MessengerClient({
       </div>
 
       {/* Colonne droite : fil de discussion */}
-      <div className="hidden md:flex flex-col flex-1 bg-[#FBF3EE]">
+      <div
+        className={`${
+          selectedConversation ? "flex" : "hidden md:flex"
+        } flex-col flex-1 bg-[#FBF3EE]`}
+      >
         {selectedConversation ? (
           <>
+            <div className="md:hidden p-4 border-b border-[#F5F5F5] bg-white">
+              <BackButton
+                label="Retour"
+                onClick={() => setSelectedConversationId(null)}
+              />
+            </div>
+
             <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
               {selectedConversation.messages.map((message, index) => {
                 const isHost = message.senderId === selectedConversation.hostId;
@@ -146,12 +158,12 @@ export default function MessengerClient({
                     )}
 
                     <div
-                      className={`flex items-end gap-2 ${
+                      className={`flex items-start gap-2 ${
                         isHost ? "justify-start" : "justify-end"
                       }`}
                     >
                       {isHost && (
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
+                        <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0">
                           <Image
                             src={selectedConversation.picture}
                             alt={selectedConversation.name}
@@ -183,7 +195,7 @@ export default function MessengerClient({
                         </p>
                       </div>
                       {!isHost && (
-                        <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0">
+                        <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0">
                           <Image
                             src="/avatar-defaut.svg"
                             alt="Moi"
