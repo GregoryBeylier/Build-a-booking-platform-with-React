@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { fetchAddFavorite, fetchRemoveFavorite } from "@/lib/api";
 import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
 
 export interface FavoriteButtonProps {
   propertyId: string;
@@ -16,6 +18,7 @@ export default function FavoriteButton({
   onRemove,
 }: FavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(initialFavorite ?? false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsFavorite(initialFavorite ?? false);
@@ -24,6 +27,13 @@ export default function FavoriteButton({
   const handleToggleFavorite = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+
+    const token = Cookie.get("token");
+    if (!token) {
+      router.push("/signin");
+      return;
+    }
+
     if (isFavorite) {
       await fetchRemoveFavorite(propertyId);
       setIsFavorite(false);
