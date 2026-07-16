@@ -7,15 +7,20 @@ import BackButton from "../ui/BackButton";
 
 export interface MessengerClientProps {
   conversations: Conversation[];
+  initialHostId?: string;
 }
 
 export default function MessengerClient({
   conversations: initialConversations,
+  initialHostId,
 }: MessengerClientProps) {
+  const matchedConversation = initialConversations.find(
+    (conversation) => conversation.hostId === Number(initialHostId),
+  );
   const [conversations, setConversations] = useState(initialConversations);
   const [selectedConversationId, setSelectedConversationId] = useState<
     number | null
-  >(null);
+  >(matchedConversation?.id ?? null);
   const [draft, setDraft] = useState("");
 
   const selectedConversation = conversations.find(

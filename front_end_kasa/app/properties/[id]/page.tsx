@@ -3,6 +3,24 @@ import BackButton from "@/components/ui/BackButton";
 import UploadedImage from "@/components/ui/UploadedImage";
 import { fetchPropertyById } from "@/lib/api";
 import { Star, MapPin } from "lucide-react";
+import Link from "next/link";
+import type { Metadata } from "next";
+
+// generateMetadata est une fonction spéciale reconnue par Next.js,
+// exportée à côté du composant de page (pas dedans)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const details = await fetchPropertyById(id); // même fonction que dans la page
+
+  return {
+    title: `${details.title} - ${details.location}`,
+    description: details.description,
+  };
+}
 
 export default async function PropertyDetail({
   params,
@@ -95,9 +113,12 @@ export default async function PropertyDetail({
             <button className="w-full py-2 px-8 rounded-[10px] bg-[#99331A] text-white">
               Contacter l'hôte
             </button>
-            <button className="w-full py-2 px-8 rounded-[10px] bg-[#99331A] text-white">
+            <Link
+              href={`/messages?hostId=${details.host?.id}`}
+              className="w-full py-2 px-8 rounded-[10px] bg-[#99331A] text-white text-center"
+            >
               Envoyer un message
-            </button>
+            </Link>
           </div>
         </div>
       </div>
