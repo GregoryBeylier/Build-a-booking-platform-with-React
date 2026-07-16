@@ -14,5 +14,9 @@ export default function HideOnDesktop({
   // true si l'URL actuelle commence par un des chemins reçus en prop
   const shouldHide = paths.some((path) => pathname.startsWith(path));
 
-  return <div className={shouldHide ? "md:hidden" : ""}>{children}</div>;
+  return (
+    <div className={shouldHide ? "md:hidden" : "md:bg-[#FFFBF9]"}>
+      {children}
+    </div>
+  );
 }

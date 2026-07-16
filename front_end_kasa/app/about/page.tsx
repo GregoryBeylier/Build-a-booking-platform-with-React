@@ -1,8 +1,15 @@
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "À propos - Kasa",
+  description:
+    "Chez Kasa, nous croyons que chaque voyage mérite un lieu unique où se sentir bien.  Depuis notre création, nous mettons en relation des voyageurs en quête d’authenticité avec des hôtes passionnés qui aiment partager leur région et leurs bonnes adresses.",
+};
 
 export default function About() {
   return (
-    <div className="max-w-7xl mx-auto mb-[120px] md:mb-[40px]">
+    <div className="max-w-7xl mx-auto mb-[120px] md:mb-[40px] mt-15 md:mt-0">
       <h1 className="font-bold text-[32px] leading-[143%] text-center text-[#99331A]">
         À propos
       </h1>

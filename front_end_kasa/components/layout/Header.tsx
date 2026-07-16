@@ -18,7 +18,7 @@ export default async function Header() {
         </div>
 
         {/* Desktop uniquement : nav gauche, Logo, nav droite centrés */}
-        <div className="hidden md:flex md:justify-center items-center">
+        <div className="hidden md:flex md:justify-center items-center  ">
           <div className="flex gap-5 mr-[50px]">
             <Link href="/">Accueil</Link>
             <Link href="/about">À propos</Link>
