@@ -84,7 +84,6 @@ export const mockConversations: Conversation[] = [
     id: 3,
     hostId: 3,
     name: "Franck Maher",
-    // TODO: remplacer par la vraie URL de Franck (id 3) depuis SQLite Viewer
     picture:
       "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/profile-picture-2.jpg",
     unread: true,
@@ -119,7 +118,6 @@ export const mockConversations: Conversation[] = [
     id: 10,
     hostId: 10,
     name: "Karen Guillet",
-    // TODO: remplacer par la vraie URL de Karen (id 10) depuis SQLite Viewer
     picture:
       "https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/front-end-kasa-project/profile-picture-9.jpg",
     unread: true,
