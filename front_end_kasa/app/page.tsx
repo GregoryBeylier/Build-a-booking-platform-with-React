@@ -2,7 +2,14 @@ import PropertyGrid from "@/components/property/PropertyGrid";
 import StepCard from "@/components/step/StepCard";
 import type { StepProps } from "@/components/step/StepCard";
 import { fetchProperties } from "@/lib/api";
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Kasa - Location de logements entre particuliers",
+  description:
+    "Découvrez des logements uniques à louer partout en France et réservez votre prochain séjour en toute simplicité avec Kasa.",
+};
 
 const steps: StepProps[] = [
   {

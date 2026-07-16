@@ -30,6 +30,24 @@ export default async function PropertyDetail({
   const { id } = await params;
   const details = await fetchPropertyById(id);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: details.title,
+    description: details.description,
+    image: details.cover,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: details.rating_avg,
+      reviewCount: details.ratings_count,
+    },
+    offers: {
+      "@type": "Offer",
+      price: details.price_per_night,
+      priceCurrency: "EUR",
+    },
+  };
+
   const smallPictures = details.pictures?.slice(1);
 
   return (
@@ -122,6 +140,10 @@ export default async function PropertyDetail({
           </div>
         </div>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   );
 }
