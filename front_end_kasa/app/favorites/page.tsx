@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "Retrouvez ici tous les logements que vous avez aimés. Prêts à réserver ? Un simple clic et votre prochain séjour est en route.",
 };
 
+/**
+ * Page Favoris : lit l'identifiant et le token de l'utilisateur dans les
+ * cookies puis récupère et affiche ses logements favoris.
+ *
+ * @returns La grille des logements favoris, un message si la liste est vide,
+ * ou rien si l'utilisateur n'est pas connecté.
+ */
 export default async function Favorites() {
   const cookieStore = await cookies();
   const id = cookieStore.get("userId")?.value;

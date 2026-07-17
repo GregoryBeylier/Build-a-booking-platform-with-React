@@ -1,5 +1,10 @@
 import Link from "next/link";
 
+/**
+ * Page 404 : affichée lorsque la page demandée n'existe pas.
+ *
+ * @returns Le message d'erreur 404 avec des liens de retour vers l'accueil.
+ */
 export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center text-center gap-8 min-h-[70vh] px-4">

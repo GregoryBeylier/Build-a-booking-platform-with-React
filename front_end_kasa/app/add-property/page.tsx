@@ -69,6 +69,14 @@ const tagList = [
   "Forêt",
 ];
 
+/**
+ * Page Ajouter une propriété : formulaire de création d'une annonce
+ * (titre, description, prix, localisation, images, équipements, catégories),
+ * avec validation Zod, upload des images et redirection vers la fiche du
+ * logement créé après soumission.
+ *
+ * @returns Le formulaire d'ajout d'une propriété.
+ */
 export default function AddProperty() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 

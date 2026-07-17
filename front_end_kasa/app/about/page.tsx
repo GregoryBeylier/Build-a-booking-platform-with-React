@@ -7,6 +7,12 @@ export const metadata: Metadata = {
     "Chez Kasa, nous croyons que chaque voyage mérite un lieu unique où se sentir bien.  Depuis notre création, nous mettons en relation des voyageurs en quête d’authenticité avec des hôtes passionnés qui aiment partager leur région et leurs bonnes adresses.",
 };
 
+/**
+ * Page À propos : présente Kasa, sa mission et ses valeurs.
+ *
+ * @returns La page À propos avec les textes de présentation,
+ * les images d'illustration et la liste des missions.
+ */
 export default function About() {
   return (
     <div className="max-w-7xl mx-auto mb-[120px] md:mb-[40px] mt-15 md:mt-0">

@@ -29,6 +29,13 @@ const steps: StepProps[] = [
   },
 ];
 
+/**
+ * Page d'accueil : récupère la liste des logements et les affiche
+ * avec une section d'introduction et les étapes "Comment ça marche ?".
+ *
+ * @returns La page d'accueil avec le titre, l'image de couverture,
+ * la grille des logements et les cartes d'étapes.
+ */
 export default async function Home() {
   const logements = await fetchProperties();
 

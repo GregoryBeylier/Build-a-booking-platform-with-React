@@ -22,6 +22,17 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Page détail d'un logement : récupère le logement correspondant à
+ * l'identifiant de l'URL et affiche toutes ses informations.
+ *
+ * @param props - Les propriétés de la page.
+ * @param props.params - Promesse des paramètres de route, contenant `id`,
+ * l'identifiant du logement à afficher.
+ * @returns La fiche du logement avec sa galerie de photos, sa description,
+ * ses équipements, ses catégories, la carte de l'hôte et les données
+ * structurées JSON-LD.
+ */
 export default async function PropertyDetail({
   params,
 }: {
