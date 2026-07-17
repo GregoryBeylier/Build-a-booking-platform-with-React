@@ -9,6 +9,17 @@ interface FormFieldProps {
   placeholder?: string;
 }
 
+/**
+ * Champ de formulaire réutilisable (label + input + message d'erreur),
+ * pensé pour être branché à react-hook-form via `register(...)`.
+ * @param label - texte affiché au-dessus du champ
+ * @param id - identifiant unique du champ, relie le label et l'input (accessibilité)
+ * @param type - type natif de l'input HTML ("email", "password" ou "text")
+ * @param error - message d'erreur de validation à afficher, s'il y en a un
+ * @param registration - objet renvoyé par `register()` de react-hook-form
+ * @param placeholder - texte indicatif affiché quand le champ est vide
+ * @returns le champ de formulaire complet
+ */
 export default function FormField({
   label,
   id,

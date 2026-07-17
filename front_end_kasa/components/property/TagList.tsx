@@ -2,6 +2,12 @@ export interface TagListProps {
   items?: string[];
 }
 
+/**
+ * Affiche une liste d'étiquettes (équipements, catégories...) sous forme
+ * de pastilles, utilisée notamment sur la page de détail d'un logement.
+ * @param items - la liste des textes à afficher, un par pastille (peut être vide ou absente)
+ * @returns la liste des pastilles
+ */
 export default function TagList({ items }: TagListProps) {
   return (
     <div className="flex flex-wrap gap-2">

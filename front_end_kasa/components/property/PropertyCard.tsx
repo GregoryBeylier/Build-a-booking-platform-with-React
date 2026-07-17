@@ -9,6 +9,16 @@ export interface PropertyCardProps {
   onRemoveFavorite?: () => void;
 }
 
+/**
+ * Carte d'affichage d'un logement (image, titre, localisation, prix),
+ * utilisée sur la page d'accueil et sur la page Favoris. Toute la carte
+ * est cliquable et mène à la page de détail du logement, à l'exception
+ * du bouton favori qui reste indépendant.
+ * @param property - le logement à afficher
+ * @param initialFavorite - true si le logement est déjà dans les favoris de l'utilisateur
+ * @param onRemoveFavorite - callback optionnel, appelé quand le logement est retiré des favoris
+ * @returns la carte du logement
+ */
 export default function PropertyCard({
   property,
   initialFavorite,

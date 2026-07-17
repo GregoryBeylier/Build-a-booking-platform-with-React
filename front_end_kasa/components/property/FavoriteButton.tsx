@@ -12,6 +12,15 @@ export interface FavoriteButtonProps {
   onRemove?: () => void;
 }
 
+/**
+ * Bouton en forme de cœur permettant d'ajouter ou de retirer un logement
+ * des favoris de l'utilisateur connecté. Redirige vers la connexion si
+ * l'utilisateur n'est pas authentifié.
+ * @param propertyId - identifiant du logement concerné
+ * @param initialFavorite - état initial du favori, fourni par le composant parent
+ * @param onRemove - callback optionnel appelé après un retrait des favoris
+ * @returns le bouton favori
+ */
 export default function FavoriteButton({
   propertyId,
   initialFavorite,
@@ -45,7 +54,7 @@ export default function FavoriteButton({
   return (
     <button
       onClick={handleToggleFavorite}
-      aria-label="Ajouter aux favoris"
+      aria-label={isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
       className={
         isFavorite
           ? "flex items-center justify-center w-8 h-8 rounded-[5px] bg-[#99331A]"

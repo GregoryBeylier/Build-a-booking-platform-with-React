@@ -3,23 +3,25 @@ import Cookie from "js-cookie";
 // ─── Wrapper HTTP ───────────────────────────────────────────────────────────
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-// URL de base de l'API
 if (!API_BASE_URL) {
   throw new Error("La variable API_URL est manquante dans le fichier .env");
 }
 
-// Options acceptées par le wrapper apiRequest
 interface RequestOptions {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
-  // Ajoute l'en-tête Authorization avec le token (true par défaut)
   auth?: boolean;
-
   token?: string;
 }
 
-// Wrapper centralisé : construit l'URL, pose les en-têtes (et le token si besoin),
-// envoie la requête et renvoie une promesse résolue avec le JSON de la réponse.
+/**
+ * Wrapper HTTP centralisé pour tous les appels à l'API Kasa.
+ * Construit l'URL, pose les en-têtes (Content-Type, Authorization),
+ * envoie la requête et retourne le JSON de la réponse.
+ * @param path - chemin de la route API (ex: "/api/properties")
+ * @param options - méthode HTTP, corps de la requête, et gestion de l'authentification
+ * @returns les données JSON de la réponse
+ */
 function apiRequest<T = any>(
   path: string,
   { method = "GET", body, auth = true, token }: RequestOptions = {},
@@ -56,7 +58,6 @@ function apiRequest<T = any>(
 
 // ─── Property ─────────────────────────────────────────────────────────────────────
 
-// Interface reutlisable
 export interface PropertyHost {
   id: number;
   name: string;
@@ -80,12 +81,19 @@ export interface Property {
   tags?: string[];
 }
 
-//appel toute les annonce pour les afficher sur l'acceuil
+/**
+ * Récupère la liste de toutes les annonces, pour l'affichage sur la page d'accueil.
+ * @returns la liste des logements
+ */
 export function fetchProperties(): Promise<Property[]> {
   return apiRequest<Property[]>("/api/properties", { auth: false });
 }
 
-//appel une annonce par son ID
+/**
+ * Récupère le détail d'une annonce à partir de son identifiant.
+ * @param id - identifiant du logement
+ * @returns le logement correspondant
+ */
 export function fetchPropertyById(id: string): Promise<Property> {
   return apiRequest<Property>(`/api/properties/${id}`, { auth: false });
 }
@@ -104,7 +112,11 @@ export type CreatePropertyPayload = Pick<
   | "pictures"
 > & { host_id: number };
 
-//appel une annonce par son ID
+/**
+ * Crée une nouvelle annonce.
+ * @param newProperty - les informations du logement à créer
+ * @returns le logement créé, tel que renvoyé par l'API
+ */
 export function fetchAddProperty(
   newProperty: CreatePropertyPayload,
 ): Promise<Property> {
@@ -127,7 +139,11 @@ export interface UserSession {
   };
 }
 
-// pour se connecter
+/**
+ * Connecte un utilisateur avec son email et son mot de passe.
+ * @param credentials - email et mot de passe de l'utilisateur
+ * @returns le token d'authentification et les informations de l'utilisateur
+ */
 export function fetchLogin(credentials: {
   password: string;
   email: string;
@@ -139,7 +155,11 @@ export function fetchLogin(credentials: {
   });
 }
 
-// pour créer un compte
+/**
+ * Crée un nouveau compte utilisateur.
+ * @param register - nom, email et mot de passe du nouvel utilisateur
+ * @returns le token d'authentification et les informations de l'utilisateur créé
+ */
 export function fetchRegister(register: {
   password: string;
   email: string;
@@ -158,21 +178,35 @@ export interface FavoriteResponse {
   ok: boolean;
 }
 
-// pour ajouter un logement aux favoris
+/**
+ * Ajoute un logement aux favoris de l'utilisateur connecté.
+ * @param id - identifiant du logement à ajouter
+ * @returns la confirmation de l'ajout
+ */
 export function fetchAddFavorite(id: string): Promise<FavoriteResponse> {
   return apiRequest<FavoriteResponse>(`/api/properties/${id}/favorite`, {
     method: "POST",
   });
 }
 
-// pour retirer un logement aux favoris
+/**
+ * Retire un logement des favoris de l'utilisateur connecté.
+ * @param id - identifiant du logement à retirer
+ * @returns la confirmation du retrait
+ */
 export function fetchRemoveFavorite(id: string): Promise<FavoriteResponse> {
   return apiRequest<FavoriteResponse>(`/api/properties/${id}/favorite`, {
     method: "DELETE",
   });
 }
 
-// pour affichier la liste des logments en forvori
+/**
+ * Récupère la liste des logements favoris d'un utilisateur.
+ * @param id - identifiant de l'utilisateur
+ * @param token - jeton d'authentification, à fournir explicitement quand l'appel
+ * vient d'un Server Component (sinon récupéré automatiquement via le cookie côté navigateur)
+ * @returns la liste des logements favoris
+ */
 export function fetchFavorites(
   id: string,
   token?: string,
@@ -187,6 +221,12 @@ export interface Upload {
   purpose?: string;
 }
 
+/**
+ * Envoie une image à l'API et retourne son URL définitive.
+ * @param file - le fichier image à envoyer
+ * @param purpose - usage prévu de l'image (ex : "property-cover", "user-picture")
+ * @returns l'URL complète de l'image hébergée
+ */
 export function fetchUploadImage({ file, purpose }: Upload): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);
@@ -210,12 +250,23 @@ export type UserProfile = Pick<
   "id" | "name" | "picture" | "role"
 >;
 
+/**
+ * Récupère le profil d'un utilisateur.
+ * @param id - identifiant de l'utilisateur
+ * @returns le profil de l'utilisateur (nom, photo, rôle)
+ */
 export function fetchUser(id: string): Promise<UserProfile> {
   return apiRequest<UserProfile>(`/api/users/${id}`, {});
 }
 
 export type UpdateUserPayload = Pick<UserProfile, "name" | "picture" | "role">;
 
+/**
+ * Met à jour le profil d'un utilisateur (nom, photo, rôle).
+ * @param id - identifiant de l'utilisateur à modifier
+ * @param data - les champs à mettre à jour
+ * @returns le profil mis à jour
+ */
 export function fetchUpdateUser(
   id: string,
   data: UpdateUserPayload,
