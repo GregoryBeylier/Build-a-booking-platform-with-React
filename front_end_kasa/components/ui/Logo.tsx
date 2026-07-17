@@ -1,5 +1,9 @@
 import Image from "next/image";
 
+/**
+ * Logo Kasa : affiche la version desktop ou mobile selon la taille d'écran.
+ * @returns le logo du site
+ */
 export default function Logo() {
   return (
     <div className="flex items-center justify-between bg-white">

@@ -1,5 +1,9 @@
 import { Conversation } from "@/lib/api";
 
+/**
+ * Conversations fictives utilisées par la page Messages en attendant
+ * une véritable API de messagerie.
+ */
 export const mockConversations: Conversation[] = [
   {
     id: 1,

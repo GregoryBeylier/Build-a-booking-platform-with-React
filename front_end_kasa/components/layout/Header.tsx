@@ -5,6 +5,12 @@ import { Heart, MessageSquare } from "lucide-react";
 import { cookies } from "next/headers";
 import LogoutButton from "@/components/auth/LogoutButton";
 
+/**
+ * En-tête de l'application : affiche le logo et la navigation
+ * (menu burger sur mobile, liens sur desktop), ainsi que le bouton
+ * de déconnexion si un token est présent dans les cookies.
+ * @returns l'en-tête du site
+ */
 export default async function Header() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token");

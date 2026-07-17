@@ -27,6 +27,12 @@ const schema = z.object({
 
 type Input = z.infer<typeof schema>;
 
+/**
+ * Formulaire d'inscription : valide les champs avec Zod (prénom, nom, email,
+ * mot de passe, CGU), crée le compte via l'API, stocke le token et
+ * l'identifiant utilisateur en cookies puis redirige vers l'accueil.
+ * @returns le formulaire d'inscription
+ */
 export default function RegisterForm() {
   // useForm gère la validation, les valeurs des champs et les erreurs du formulaire
   const {

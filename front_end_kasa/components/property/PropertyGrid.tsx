@@ -9,6 +9,12 @@ export interface PropertyGridProps {
   properties: Property[];
 }
 
+/**
+ * Grille des logements de la page d'accueil : charge les favoris de
+ * l'utilisateur connecté pour marquer les cartes correspondantes.
+ * @param properties - la liste des logements à afficher
+ * @returns la grille de cartes de logements
+ */
 export default function PropertyGrid({ properties }: PropertyGridProps) {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
 

@@ -10,6 +10,15 @@ export interface MessengerClientProps {
   initialHostId?: string;
 }
 
+/**
+ * Interface de messagerie : liste des conversations à gauche et fil de
+ * discussion à droite, avec envoi de nouveaux messages (stockés en local).
+ * Ouvre directement la conversation de l'hôte demandé si un identifiant
+ * est fourni.
+ * @param conversations - les conversations initiales à afficher
+ * @param initialHostId - identifiant de l'hôte dont la conversation doit être ouverte à l'arrivée
+ * @returns la messagerie complète
+ */
 export default function MessengerClient({
   conversations: initialConversations,
   initialHostId,

@@ -15,6 +15,13 @@ export const metadata: Metadata = {
   description: "Location de logement",
 };
 
+/**
+ * Layout racine de l'application : applique la police et les styles globaux,
+ * et affiche le Header et le Footer autour du contenu de chaque page
+ * (masqués sur desktop pour la messagerie).
+ * @param children - le contenu de la page en cours à afficher dans le layout
+ * @returns la structure HTML globale de l'application
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

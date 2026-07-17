@@ -3,6 +3,11 @@ import { useRouter } from "next/navigation";
 import Cookie from "js-cookie";
 import { LogOut } from "lucide-react";
 
+/**
+ * Bouton de déconnexion : supprime le token et l'identifiant utilisateur
+ * des cookies puis redirige vers la page de connexion.
+ * @returns le bouton de déconnexion
+ */
 export default function LogoutButton() {
   const router = useRouter();
   const handleLogout = () => {

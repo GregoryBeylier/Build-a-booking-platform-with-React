@@ -6,6 +6,11 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/components/ui/Logo";
 
+/**
+ * Menu de navigation mobile : bouton burger qui ouvre un panneau plein
+ * écran avec les liens du site, refermable au clic ou avec la touche Échap.
+ * @returns le bouton burger et son menu plein écran
+ */
 export default function MobileMenu() {
   const [openMenu, setOpenMenu] = useState(false);
 

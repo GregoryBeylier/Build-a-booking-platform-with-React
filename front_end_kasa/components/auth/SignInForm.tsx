@@ -15,6 +15,12 @@ const schema = z.object({
 
 type Input = z.infer<typeof schema>;
 
+/**
+ * Formulaire de connexion : valide l'email et le mot de passe avec Zod,
+ * authentifie l'utilisateur via l'API, stocke le token et l'identifiant
+ * utilisateur en cookies puis redirige vers l'accueil.
+ * @returns le formulaire de connexion
+ */
 export default function SignInForm() {
   // useForm gère la validation, les valeurs des champs et les erreurs du formulaire
   const {
