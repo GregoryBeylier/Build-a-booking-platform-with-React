@@ -25,9 +25,6 @@ export default function FavoriteButton({
   }, [initialFavorite]);
 
   const handleToggleFavorite = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
     const token = Cookie.get("token");
     if (!token) {
       router.push("/signin");
@@ -38,6 +35,7 @@ export default function FavoriteButton({
       await fetchRemoveFavorite(propertyId);
       setIsFavorite(false);
       onRemove?.();
+      router.refresh();
     } else {
       await fetchAddFavorite(propertyId);
       setIsFavorite(true);
