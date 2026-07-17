@@ -14,13 +14,15 @@ interface RequestOptions {
   body?: unknown;
   // Ajoute l'en-tête Authorization avec le token (true par défaut)
   auth?: boolean;
+
+  token?: string;
 }
 
 // Wrapper centralisé : construit l'URL, pose les en-têtes (et le token si besoin),
 // envoie la requête et renvoie une promesse résolue avec le JSON de la réponse.
 function apiRequest<T = any>(
   path: string,
-  { method = "GET", body, auth = true }: RequestOptions = {},
+  { method = "GET", body, auth = true, token }: RequestOptions = {},
 ): Promise<T> {
   const headers: Record<string, string> = {};
 
@@ -29,7 +31,7 @@ function apiRequest<T = any>(
   }
 
   if (auth) {
-    headers.Authorization = `Bearer ${Cookie.get("token")}`;
+    headers.Authorization = `Bearer ${token ?? Cookie.get("token")}`;
   }
 
   let requestBody: BodyInit | undefined;
@@ -171,8 +173,11 @@ export function fetchRemoveFavorite(id: string): Promise<FavoriteResponse> {
 }
 
 // pour affichier la liste des logments en forvori
-export function fetchFavorites(id: string): Promise<Property[]> {
-  return apiRequest<Property[]>(`/api/users/${id}/favorites`, {});
+export function fetchFavorites(
+  id: string,
+  token?: string,
+): Promise<Property[]> {
+  return apiRequest<Property[]>(`/api/users/${id}/favorites`, { token });
 }
 
 // ─── upload ─────────────────────────────────────────────────────────────────────
