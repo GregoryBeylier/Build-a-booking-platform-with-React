@@ -81,7 +81,7 @@ export default function MessengerClient({
                 <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0">
                   <Image
                     src={conversation.picture}
-                    alt={conversation.name}
+                    alt=""
                     fill
                     className="object-cover"
                   />
@@ -92,7 +92,7 @@ export default function MessengerClient({
                       {conversation.name}
                     </p>
                     {lastMessage && (
-                      <span className="text-xs text-[#868686] shrink-0 ml-2">
+                      <span className="text-xs text-[#565656] shrink-0 ml-2">
                         {new Date(lastMessage.createdAt).toLocaleTimeString(
                           [],
                           {
@@ -104,7 +104,7 @@ export default function MessengerClient({
                     )}
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-sm text-[#868686] truncate">
+                    <p className="text-sm text-[#565656] truncate">
                       {lastMessage?.content}
                     </p>
                     {conversation.unread && (
@@ -148,7 +148,7 @@ export default function MessengerClient({
                     {showDateSeparator && (
                       <div className="flex items-center gap-4 my-4">
                         <div className="flex-1 h-px bg-[#E0E0E0]" />
-                        <span className="text-xs text-[#868686] whitespace-nowrap">
+                        <span className="text-xs text-[#565656] whitespace-nowrap">
                           {new Date(message.createdAt).toLocaleDateString(
                             "fr-FR",
                             {
@@ -171,7 +171,7 @@ export default function MessengerClient({
                         <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0">
                           <Image
                             src={selectedConversation.picture}
-                            alt={selectedConversation.name}
+                            alt=""
                             fill
                             className="object-cover"
                           />
@@ -182,7 +182,7 @@ export default function MessengerClient({
                           isHost ? "items-start" : "items-end"
                         }`}
                       >
-                        <span className="text-xs text-[#868686] mb-1">
+                        <span className="text-xs text-[#565656] mb-1">
                           {isHost ? selectedConversation.name : "Moi"} •{" "}
                           {new Date(message.createdAt).toLocaleTimeString([], {
                             hour: "2-digit",
@@ -203,7 +203,7 @@ export default function MessengerClient({
                         <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0">
                           <Image
                             src="/avatar-defaut.svg"
-                            alt="Moi"
+                            alt=""
                             fill
                             className="object-cover"
                           />
@@ -220,6 +220,7 @@ export default function MessengerClient({
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
                   placeholder="Envoyer un message"
+                  aria-label="Écrire un message"
                   rows={2}
                   className="w-full resize-none rounded-2xl px-4 py-3 pr-16 focus:outline-none"
                 />
@@ -234,7 +235,7 @@ export default function MessengerClient({
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-[#868686]">
+          <div className="flex-1 flex items-center justify-center text-[#565656]">
             Sélectionne une conversation pour afficher les messages
           </div>
         )}

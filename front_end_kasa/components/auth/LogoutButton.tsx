@@ -14,7 +14,7 @@ export default function LogoutButton() {
 
   return (
     <button onClick={handleLogout} className="translate-y-[-3px]">
-      <LogOut size={17} className="text-[#99331A]" />
+      <LogOut aria-label="Déconnexion" size={17} className="text-[#99331A]" />
     </button>
   );
 }

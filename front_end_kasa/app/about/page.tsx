@@ -26,7 +26,7 @@ export default function About() {
       </div>
       <div className="relative aspect-[342/458] md:aspect-[1115/458] rounded-[20px] overflow-hidden w-full mt-[40px]">
         <Image
-          src="/pictureAbout.svg"
+          src="/pictureAbout.png"
           alt="Maison moderne en bois entourée d'abres', sous un couché de soleil"
           fill
           className="object-cover"
@@ -56,7 +56,7 @@ export default function About() {
 
         <div className="relative aspect-[358/458] md:aspect-[494/458] rounded-[20px] overflow-hidden w-full">
           <Image
-            src="/pictureAbout2.svg"
+            src="/aboutPicture.png"
             alt="chalet en bois, sous un couché de soleil"
             fill
             className="object-cover"

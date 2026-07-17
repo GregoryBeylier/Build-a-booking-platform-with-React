@@ -30,11 +30,11 @@ export default async function Header() {
               + Ajouter un logement{" "}
             </Link>
             <div className="flex gap-3 translate-y-[2px]">
-              <Link href="/favorites">
+              <Link aria-label="Voir mes favoris" href="/favorites">
                 <Heart size={17} className="text-[#99331A] translate-y-[1px]" />
               </Link>
               <span className="w-[1px] h-4 bg-[#99331A]" />
-              <Link href="/messages">
+              <Link aria-label="Voir mes messages" href="/messages">
                 <MessageSquare
                   size={17}
                   className="text-[#99331A] translate-y-[1px]"

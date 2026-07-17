@@ -68,6 +68,8 @@ export default async function PropertyDetail({
                 alt="Photo du logement"
                 fill
                 className="object-cover"
+                preload
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
             <div className="flex-1 grid grid-cols-4 md:grid-cols-2 gap-[10px]">
@@ -81,6 +83,7 @@ export default async function PropertyDetail({
                     alt="Photo du logement"
                     fill
                     className="object-cover"
+                    sizes="25vw"
                   />
                 </div>
               ))}
@@ -117,6 +120,7 @@ export default async function PropertyDetail({
                 alt="Photo de profil de l'hôte"
                 fill
                 className="object-cover"
+                sizes="82px"
               />
             </div>
             <div className="flex items-center gap-[18px]">

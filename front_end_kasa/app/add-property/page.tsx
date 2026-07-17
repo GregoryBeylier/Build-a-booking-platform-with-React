@@ -80,7 +80,6 @@ export default function AddProperty() {
     }
   };
 
-  // useForm gère la validation, les valeurs des champs et les erreurs du formulaire
   const {
     register,
     setValue,
@@ -88,11 +87,9 @@ export default function AddProperty() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    // Valide le champ lors du blur
     mode: "onTouched",
   });
 
-  // useRouter permet de naviguer entre les pages
   const router = useRouter();
 
   const [coverFileName, setCoverFileName] = useState<string>("");
@@ -258,62 +255,54 @@ export default function AddProperty() {
           <div className="flex flex-col gap-6 w-full md:w-[576px] self-start">
             <div className="bg-white border border-[#F5F5F5] rounded-[10px] px-4 py-4 md:px-20 md:py-12 flex flex-col gap-4">
               <div className="flex flex-col gap-1">
-                <label
-                  className="text-sm font-medium text-[#0D0D0D]"
-                  htmlFor="uploadCover"
-                >
+                {/* Titre : simple texte, ne sert plus de label pour éviter le doublon */}
+                <span className="text-sm font-medium text-[#0D0D0D]">
                   Image de couverture
-                </label>
-                <div className="flex items-center gap-2">
-                  <label
-                    htmlFor="uploadCover"
-                    className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 cursor-pointer flex items-center text-sm text-[#565656] truncate"
-                  >
+                </span>
+                {/* Un seul vrai label, qui enveloppe les deux zones cliquables */}
+                <label
+                  htmlFor="uploadCover"
+                  aria-label="Image de couverture"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <span className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 flex items-center text-sm text-[#565656] truncate">
                     {coverFileName}
-                  </label>
-                  <label
-                    htmlFor="uploadCover"
-                    className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0 cursor-pointer"
-                  >
-                    <Plus size={20} />
-                  </label>
-                  <input
-                    id="uploadCover"
-                    type="file"
-                    className="hidden"
-                    onChange={handleCoverUpload}
-                  />
-                </div>
+                  </span>
+                  <span className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0">
+                    <Plus size={20} aria-hidden="true" />
+                  </span>
+                </label>
+                <input
+                  id="uploadCover"
+                  type="file"
+                  className="hidden"
+                  onChange={handleCoverUpload}
+                />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label
-                  className="text-sm font-medium text-[#0D0D0D]"
-                  htmlFor="uploadPicture"
-                >
+                <span className="text-sm font-medium text-[#0D0D0D]">
                   Image du logement
-                </label>
-                <div className="flex items-center gap-2">
-                  <label
-                    htmlFor="uploadPicture"
-                    className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 cursor-pointer flex items-center text-sm text-[#565656] truncate"
-                  >
+                </span>
+                <label
+                  htmlFor="uploadPicture"
+                  aria-label="Image du logement"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <span className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 flex items-center text-sm text-[#565656] truncate">
                     {pictureFileNames.join(", ")}
-                  </label>
-                  <label
-                    htmlFor="uploadPicture"
-                    className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0 cursor-pointer"
-                  >
-                    <Plus size={20} />
-                  </label>
-                  <input
-                    id="uploadPicture"
-                    type="file"
-                    multiple
-                    className="hidden"
-                    onChange={handlePicturesUpload}
-                  />
-                </div>
+                  </span>
+                  <span className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0">
+                    <Plus size={20} aria-hidden="true" />
+                  </span>
+                </label>
+                <input
+                  id="uploadPicture"
+                  type="file"
+                  multiple
+                  className="hidden"
+                  onChange={handlePicturesUpload}
+                />
                 <span className="text-[#99331A] text-sm">
                   +Ajouter une image
                 </span>
@@ -337,32 +326,27 @@ export default function AddProperty() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label
-                  className="text-sm font-medium text-[#0D0D0D]"
-                  htmlFor="userPicture"
-                >
+                <span className="text-sm font-medium text-[#0D0D0D]">
                   Photo de profil
-                </label>
-                <div className="flex items-center gap-2">
-                  <label
-                    htmlFor="userPicture"
-                    className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 cursor-pointer flex items-center text-sm text-[#565656] truncate"
-                  >
+                </span>
+                <label
+                  htmlFor="userPicture"
+                  aria-label="Photo de profil"
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <span className="flex-1 h-[40px] rounded-[4px] border border-[#F5F5F5] bg-white px-2.5 flex items-center text-sm text-[#565656] truncate">
                     {userPictureFileName}
-                  </label>
-                  <label
-                    htmlFor="userPicture"
-                    className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0 cursor-pointer"
-                  >
-                    <Plus size={20} />
-                  </label>
-                  <input
-                    id="userPicture"
-                    type="file"
-                    className="hidden"
-                    onChange={handleUserPicture}
-                  />
-                </div>
+                  </span>
+                  <span className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0">
+                    <Plus size={20} aria-hidden="true" />
+                  </span>
+                </label>
+                <input
+                  id="userPicture"
+                  type="file"
+                  className="hidden"
+                  onChange={handleUserPicture}
+                />
                 <span className="text-[#99331A] text-sm">
                   +Ajouter une image
                 </span>
@@ -371,8 +355,8 @@ export default function AddProperty() {
           </div>
 
           {/* Carte Équipements */}
-          <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-4 md:p-20 w-full md:w-[576px] flex flex-col gap-4">
-            <h2 className="font-medium">Équipements</h2>
+          <fieldset className="bg-white border border-[#F5F5F5] rounded-[10px] p-4 md:p-20 w-full md:w-[576px] flex flex-col gap-4">
+            <legend className="font-medium">Équipements</legend>
             <div className="grid grid-cols-2 gap-2">
               {equipmentsList.map((equipment) => (
                 <label
@@ -389,7 +373,7 @@ export default function AddProperty() {
                 </label>
               ))}
             </div>
-          </div>
+          </fieldset>
 
           {/* Carte Catégories */}
           <div className="bg-white border border-[#F5F5F5] rounded-[10px] p-4 md:p-20 w-full md:w-[576px] flex flex-col gap-4 self-start">
@@ -427,9 +411,10 @@ export default function AddProperty() {
                 />
                 <button
                   type="button"
+                  aria-label="Ajouter un tag personnalisé"
                   className="w-[40px] h-[40px] flex items-center justify-center rounded-[4px] bg-[#99331A] text-white shrink-0"
                 >
-                  <Plus size={20} />
+                  <Plus size={20} aria-hidden="true" />
                 </button>
               </div>
               <span className="text-[#99331A] text-sm">+Ajouter un tag</span>

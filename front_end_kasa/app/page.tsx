@@ -45,10 +45,12 @@ export default async function Home() {
       </div>
       <div className="relative aspect-[342/458] md:aspect-[1115/458] rounded-[20px] overflow-hidden w-full">
         <Image
-          src="/Picture_home.svg"
+          src="/Picture_home.png"
           alt="Maison moderne en bois entourée de hautes herbes, sous un ciel nuageux"
           fill
           className="object-cover"
+          preload
+          sizes="100vw"
         />
       </div>
       <PropertyGrid properties={logements} />
