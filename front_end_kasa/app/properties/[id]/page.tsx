@@ -5,6 +5,8 @@ import { fetchPropertyById } from "@/lib/api";
 import { Star, MapPin } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import PropertyCarousel from "@/components/property/PropertyCarousel";
+import { notFound } from "next/navigation";
 
 // generateMetadata est une fonction spéciale reconnue par Next.js,
 // exportée à côté du composant de page (pas dedans)
@@ -39,7 +41,12 @@ export default async function PropertyDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const details = await fetchPropertyById(id);
+  let details;
+  try {
+    details = await fetchPropertyById(id);
+  } catch {
+    notFound();
+  }
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -71,17 +78,7 @@ export default async function PropertyDetail({
         <div className="flex-1 flex flex-col gap-[20px] md:mb-[86px]">
           <div className="flex-col flex flex-1 gap-[10px] md:flex-row">
             <div className="relative aspect-[303/357] rounded-[10px] flex-1 overflow-hidden">
-              <UploadedImage
-                src={
-                  details.pictures?.[0] ??
-                  "/cover-annonce-immobilier-defaut.svg"
-                }
-                alt="Photo du logement"
-                fill
-                className="object-cover"
-                preload
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
+              <PropertyCarousel pictures={details.pictures ?? []} />
             </div>
             <div className="flex-1 grid grid-cols-4 md:grid-cols-2 gap-[10px]">
               {smallPictures?.map((picture, index) => (
