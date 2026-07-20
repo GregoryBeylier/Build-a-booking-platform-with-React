@@ -1,7 +1,7 @@
 import Logo from "@/components/ui/Logo";
 import MobileMenu from "./MobileMenu";
 import Link from "next/link";
-import { Heart, MessageSquare } from "lucide-react";
+import { Heart, LogOut, MessageSquare } from "lucide-react";
 import { cookies } from "next/headers";
 import LogoutButton from "@/components/auth/LogoutButton";
 
@@ -20,7 +20,7 @@ export default async function Header() {
         {/* Mobile uniquement : Logo + burger côte à côte */}
         <div className="flex md:hidden justify-between items-center">
           <Logo />
-          <MobileMenu />
+          <MobileMenu isLoggedIn={!!token} />
         </div>
 
         {/* Desktop uniquement : nav gauche, Logo, nav droite centrés */}
@@ -47,7 +47,15 @@ export default async function Header() {
                 />
               </Link>
               <span className="w-[1px] h-4 bg-[#99331A]" />
-              {token && <LogoutButton />}
+              {token && (
+                <LogoutButton className="translate-y-[-3px]">
+                  <LogOut
+                    aria-label="Déconnexion"
+                    size={17}
+                    className="text-[#99331A]"
+                  />
+                </LogoutButton>
+              )}
             </div>
           </div>
         </div>

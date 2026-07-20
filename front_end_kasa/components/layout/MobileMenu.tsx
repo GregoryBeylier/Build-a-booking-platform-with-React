@@ -5,13 +5,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/components/ui/Logo";
+import LogoutButton from "@/components/auth/LogoutButton";
+
+export interface MobileMenuProps {
+  isLoggedIn: boolean;
+}
 
 /**
  * Menu de navigation mobile : bouton burger qui ouvre un panneau plein
  * écran avec les liens du site, refermable au clic ou avec la touche Échap.
  * @returns le bouton burger et son menu plein écran
  */
-export default function MobileMenu() {
+export default function MobileMenu({ isLoggedIn }: MobileMenuProps) {
   const [openMenu, setOpenMenu] = useState(false);
 
   // Ferme le menu avec la touche Échap
@@ -84,6 +89,11 @@ export default function MobileMenu() {
           >
             Favoris
           </Link>
+          {isLoggedIn && (
+            <LogoutButton className="block py-4 text-lg text-[#99331A] text-left w-full">
+              Déconnexion
+            </LogoutButton>
+          )}
           <Link
             href="/add-property"
             className="block mt-4 bg-[#99331A] text-white w-fit rounded-[10px] py-2 px-8"
